@@ -66,6 +66,9 @@ defmodule RumblWeb do
     end
   end
 
+  @spec html() ::
+          {:__block__, [],
+           [{:__block__, [], [...]} | {:import, [...], [...]} | {:use, [...], [...]}, ...]}
   def html do
     quote do
       use Phoenix.Component

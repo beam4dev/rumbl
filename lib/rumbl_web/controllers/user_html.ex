@@ -63,6 +63,7 @@ defmodule RumblWeb.UserHTML do
         </.error>
         <.input field={f[:name]} label="Name"/>
         <.input field={f[:username]} label="Username" />
+        <.input type="password" field={f[:password]} label="Password" />
         <:actions>
           <.button>Create User</.button>
         </:actions>
