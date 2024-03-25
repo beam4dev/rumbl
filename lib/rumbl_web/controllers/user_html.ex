@@ -35,8 +35,6 @@ defmodule RumblWeb.UserHTML do
        </table>
       </div>
 
-
-
     """
   end
 
@@ -48,6 +46,7 @@ defmodule RumblWeb.UserHTML do
           <field><%=@user.name%></field>
           <field><%=@user.username%></field>
       </div>
+      <.back navigate={~p"/users"}>Back to users</.back>
     """
   end
 
