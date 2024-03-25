@@ -38,20 +38,26 @@ defmodule Rumbl.Multimedia do
   def get_video!(id), do: Repo.get!(Video, id)
 
   @doc """
-  Creates a video.
+  Creates a video for a given user.
+
+  ## Parameters
+
+  - `user`: The user for whom the video is being created. It should be of type `Accounts.User`.
+  - `attrs`: A map containing the attributes for the video.
 
   ## Examples
 
-      iex> create_video(%{field: value})
+      iex> create_video(%Accounts.User{}, %{field: value})
       {:ok, %Video{}}
 
-      iex> create_video(%{field: bad_value})
+      iex> create_video(%Accounts.User{}, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_video(attrs \\ %{}) do
+  def create_video(%Rumbl.Accounts.User{} = user, attrs \\ %{}) do
     %Video{}
     |> Video.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
 
@@ -100,5 +106,21 @@ defmodule Rumbl.Multimedia do
   """
   def change_video(%Video{} = video, attrs \\ %{}) do
     Video.changeset(video, attrs)
+  end
+
+  def list_user_videos(%Rumbl.Accounts.User{} = user) do
+    Video
+    |> user_videos_query(user)
+    |> Repo.all()
+  end
+
+  def get_user_video!(%Rumbl.Accounts.User{} = user, id) do
+    Video
+    |> user_videos_query(user)
+    |> Repo.get!(id)
+  end
+
+  defp user_videos_query(query, %Rumbl.Accounts.User{id: user_id}) do
+    from(v in query, where: v.user_id == ^user_id)
   end
 end
