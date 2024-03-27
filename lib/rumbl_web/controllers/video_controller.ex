@@ -4,8 +4,11 @@ defmodule RumblWeb.VideoController do
   alias Rumbl.Multimedia
   alias Rumbl.Multimedia.Video
 
+  plug :load_categories when action in [:new, :create , :edit, :update]
+
   def index(conn, _params, current_user) do
     videos = Multimedia.list_user_videos(current_user)
+    IO.inspect(conn.assigns)
     render(conn, :index, videos: videos)
   end
 
@@ -19,7 +22,7 @@ defmodule RumblWeb.VideoController do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video created successfully.")
-        |> redirect(to: ~p"/videos/#{video}")
+        |> redirect(to: ~p"/manage/videos/#{video}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :new, changeset: changeset)
@@ -44,7 +47,7 @@ defmodule RumblWeb.VideoController do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video updated successfully.")
-        |> redirect(to: ~p"/videos/#{video}")
+        |> redirect(to: ~p"/manage/videos/#{video}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :edit, video: video, changeset: changeset)
@@ -57,13 +60,17 @@ defmodule RumblWeb.VideoController do
 
     conn
     |> put_flash(:info, "Video deleted successfully.")
-    |> redirect(to: ~p"/videos")
+    |> redirect(to: ~p"/manage/videos")
   end
 
 
   def action(conn, _) do
     args = [conn, conn.params, conn.assigns.current_user]
     apply(__MODULE__, action_name(conn), args)
+  end
+
+  defp load_categories(conn, _) do
+    assign(conn, :categories, Rumbl.Multimedia.list_alphabetical_categories())
   end
 
 end
