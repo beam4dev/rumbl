@@ -8,7 +8,6 @@ defmodule RumblWeb.VideoController do
 
   def index(conn, _params, current_user) do
     videos = Multimedia.list_user_videos(current_user)
-    IO.inspect(conn.assigns)
     render(conn, :index, videos: videos)
   end
 
