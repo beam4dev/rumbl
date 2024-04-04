@@ -11,6 +11,11 @@
            <.link href={~p"/sessions/@current_user.id"} method="delete" data-confirm="Are you sure?">
             Log out
            </.link>
+        </li>
+        <li>    
+           <.link href={~p"/manage/videos"} method="get">
+            My Videos
+           </.link>
 
        </li>
        <% else %>
@@ -23,7 +28,6 @@
 
        <% end %>
      </ul>
-     
     </div>
   </div>
 </header>

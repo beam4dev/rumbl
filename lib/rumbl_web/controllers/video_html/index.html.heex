@@ -11,15 +11,15 @@
   <:col :let={video} label="Url"><%= video.url %></:col>
   <:col :let={video} label="Title"><%= video.title %></:col>
   <:col :let={video} label="Description"><%= video.description %></:col>
-  <:action :let={video}>
-    <div class="sr-only">
-      <.link navigate={~p"/manage/videos/#{video}"}>Show</.link>
-    </div>
+  <:action :let={video}>  
     <.link navigate={~p"/manage/videos/#{video}/edit"}>Edit</.link>
   </:action>
   <:action :let={video}>
     <.link href={~p"/manage/videos/#{video}"} method="delete" data-confirm="Are you sure?">
       Delete
     </.link>
+  </:action>
+  <:action :let={video}>
+      <.link navigate={~p"/watch/#{video}"}>Watch</.link>
   </:action>
 </.table>
