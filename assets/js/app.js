@@ -1,6 +1,6 @@
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
-// import "./user_socket.js"
+import "./user_socket.js"
 
 // You can include dependencies in two ways.
 //
@@ -26,6 +26,13 @@ import topbar from "../vendor/topbar"
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, { params: { _csrf_token: csrfToken } })
 
+//socket connection for the Channel code.
+let socket = new Socket("/socket", {
+    params: {token: window.userToken},
+    logger: (kind, msg, data) => { console.log(`${kind}: ${msg}`, data) }
+})
+    
+
 // Show progress bar on live navigation and form submits
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
@@ -41,10 +48,5 @@ liveSocket.connect()
 window.liveSocket = liveSocket
 
 
-import Player from "./player.js"
-let video = document.getElementById("video")
-if (video) {
-    Player.init(video.id, video.getAttribute("data-player-id"), () => {
-        console.log("player ready!")
-    })
-}
+import Video from "./video.js"
+Video.init(socket, document.getElementById("video"))
